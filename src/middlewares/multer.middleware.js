@@ -14,20 +14,19 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 
-// Get absolute path to "public/temp"
+// Create upload folder if it doesn't exist
 const uploadPath = path.join(process.cwd(), "public", "temp");
-
-// Ensure folder exists
 if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath, { recursive: true });
 }
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, uploadPath); // ✅ Correct path
+    cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname); // You can add a timestamp here if needed
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
   },
 });
 
